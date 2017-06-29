@@ -27,7 +27,8 @@ namespace WebApplicationBasic
         public void ConfigureServices(IServiceCollection services)
         {
             //Added DbContext
-            services.AddDbContext<ShoppingCartDbContext>(options => options.UseSqlServer(""));
+            //services.AddDbContext<ShoppingCartDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
+            services.AddDbContext<ShoppingCartDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             // Add framework services.
             services.AddMvc();
         }

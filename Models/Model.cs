@@ -1,8 +1,14 @@
-﻿namespace ShoppingCart.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ShoppingCart.Models
 {
+    [Table("Models")]
     public class Model
     {
         public int Id { get; set; }
+        [Required]
+        [StringLength(255)]
         public string Name { get; set; }
 
         //This is navigation property
