@@ -9,7 +9,8 @@ import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { VehicleFormComponent } from "./components/vehicle-form/vehicle-form.component";
 import { MakeService } from "./services/make.service";
-
+import Featureservice = require("./services/feature.service");
+import FeatureService = Featureservice.FeatureService;
 
 export const sharedConfig: NgModule = {
     bootstrap: [ AppComponent ],
@@ -34,6 +35,7 @@ export const sharedConfig: NgModule = {
         ])
     ],
     providers: [
-        MakeService
+        MakeService,
+        FeatureService
     ] 
 };

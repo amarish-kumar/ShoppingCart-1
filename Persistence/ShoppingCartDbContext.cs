@@ -16,6 +16,7 @@ namespace ShoppingCart.Persistence
         }
 
         public DbSet<Make> Makes { get; set; }
+        public DbSet<Feature> Features { get; set; }
 
         //Keeping only make will resolve model as well as we are having collection of model in make,
         //however, if we need to explicitly query Model, then we need to have.
