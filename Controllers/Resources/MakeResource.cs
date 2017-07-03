@@ -8,20 +8,16 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.Controllers.Resources
 {
-    public class MakeResource
+    public class MakeResource :KeyValuePairResource
     {
-        public int Id { get; set; }
-       
-        public string Name { get; set; }
-
-        public ICollection<ModelResource> Models { get; set; }
+        public ICollection<KeyValuePairResource> Models { get; set; }
 
         //make.Models= new Collection<Model>(); we don't to repeat this at every place whereever this class is used
         //hence, we should initialize the same ctor level itself.
 
         public MakeResource()
         {
-            Models = new Collection<ModelResource>();
+            Models = new Collection<KeyValuePairResource>();
         }
     }
 }

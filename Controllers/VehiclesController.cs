@@ -21,30 +21,30 @@ namespace ShoppingCart.Controllers
             _context = context;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateVehicle([FromBody]VehicleResource vehicleResource)
+        public async Task<IActionResult> CreateVehicle([FromBody]SaveVehicleResource saveVehicleResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             //Custom Error Handling
-            var model = await _context.Models.FindAsync(vehicleResource.ModelId);
+            var model = await _context.Models.FindAsync(saveVehicleResource.ModelId);
             if (model == null)
             {
                 ModelState.AddModelError("ModelId", "Invalid ModelId");
                 return BadRequest(ModelState);
             }
             //Mapping API Resource to domain object
-            var vehicle = _mapper.Map<VehicleResource, Vehicle>(vehicleResource);
+            var vehicle = _mapper.Map<SaveVehicleResource, Vehicle>(saveVehicleResource);
             vehicle.LastUpdate = DateTime.Now;
             _context.Vehicles.Add(vehicle);
             await _context.SaveChangesAsync();
-            var result = _mapper.Map<Vehicle, VehicleResource>(vehicle);
+            var result = _mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
             //This will get serialized as JSON object and return HTTP status code 200
             return Ok(result);
         }
 
         [HttpPut("{id}")] // /api/vehicles/id
-        public async Task<IActionResult> UpdateVehicle(int id, [FromBody]VehicleResource vehicleResource)
+        public async Task<IActionResult> UpdateVehicle(int id, [FromBody]SaveVehicleResource saveVehicleResource)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -53,11 +53,11 @@ namespace ShoppingCart.Controllers
             var vehicle = await _context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
             if (vehicle == null)
                 return NotFound();
-            _mapper.Map<VehicleResource, Vehicle>(vehicleResource, vehicle);
+            _mapper.Map<SaveVehicleResource, Vehicle>(saveVehicleResource, vehicle);
             vehicle.LastUpdate = DateTime.Now;
 
             await _context.SaveChangesAsync();
-            var result = _mapper.Map<Vehicle, VehicleResource>(vehicle);
+            var result = _mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
             //This will get serialized as JSON object and return HTTP status code 200
             return Ok(result);
         }
@@ -76,7 +76,13 @@ namespace ShoppingCart.Controllers
         public async Task<IActionResult> GetVehicle(int id)
         {
             //Fetch vehicle with Features with the id
-            var vehicle = await _context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await _context.Vehicles
+                .Include(v => v.Features)
+                //EagerLoad Vehicle Features
+                .ThenInclude(vf=>vf.Feature)
+                .Include(v=>v.Model)
+                .ThenInclude(m=>m.Make)
+                .SingleOrDefaultAsync(v => v.Id == id);
             if (vehicle == null)
                 return NotFound();
             var vehicleResource = _mapper.Map<Vehicle, VehicleResource>(vehicle);
