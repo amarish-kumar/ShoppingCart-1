@@ -38,7 +38,19 @@ namespace ShoppingCart.Controllers
             vehicle.LastUpdate = DateTime.Now;
             _context.Vehicles.Add(vehicle);
             await _context.SaveChangesAsync();
-            var result = _mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+
+           await _context.Models.Include(m => m.Make).SingleOrDefaultAsync(m => m.Id == vehicle.ModelId);
+
+            //Fetch vehicle with Features with the id
+             vehicle = await _context.Vehicles
+                .Include(v => v.Features)
+                //EagerLoad Vehicle Features
+                .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Model)
+                .ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(v => v.Id == vehicle.Id);
+
+            var result = _mapper.Map<Vehicle, VehicleResource>(vehicle);
             //This will get serialized as JSON object and return HTTP status code 200
             return Ok(result);
         }
@@ -50,14 +62,21 @@ namespace ShoppingCart.Controllers
                 return BadRequest(ModelState);
 
             //Mapping API Resource to domain object
-            var vehicle = await _context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+           var vehicle = await _context.Vehicles
+                .Include(v => v.Features)
+                //EagerLoad Vehicle Features
+                .ThenInclude(vf => vf.Feature)
+                .Include(v => v.Model)
+                .ThenInclude(m => m.Make)
+                .SingleOrDefaultAsync(v => v.Id == id);
+
             if (vehicle == null)
                 return NotFound();
             _mapper.Map<SaveVehicleResource, Vehicle>(saveVehicleResource, vehicle);
             vehicle.LastUpdate = DateTime.Now;
 
             await _context.SaveChangesAsync();
-            var result = _mapper.Map<Vehicle, SaveVehicleResource>(vehicle);
+            var result = _mapper.Map<Vehicle, VehicleResource>(vehicle);
             //This will get serialized as JSON object and return HTTP status code 200
             return Ok(result);
         }
