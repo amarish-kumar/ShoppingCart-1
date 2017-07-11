@@ -14,11 +14,13 @@ namespace ShoppingCart.Controllers
     {
         private IMapper _mapper;
         private ShoppingCartDbContext _context;
+        private IVehicleRepository _repository;
 
-        public VehiclesController(IMapper mapper, ShoppingCartDbContext context)
+        public VehiclesController(IMapper mapper, ShoppingCartDbContext context, IVehicleRepository repository)
         {
             _mapper = mapper;
             _context = context;
+            _repository = repository;
         }
         [HttpPost]
         public async Task<IActionResult> CreateVehicle([FromBody]SaveVehicleResource saveVehicleResource)
@@ -36,19 +38,13 @@ namespace ShoppingCart.Controllers
             //Mapping API Resource to domain object
             var vehicle = _mapper.Map<SaveVehicleResource, Vehicle>(saveVehicleResource);
             vehicle.LastUpdate = DateTime.Now;
-            _context.Vehicles.Add(vehicle);
+            _repository.Add(vehicle);
             await _context.SaveChangesAsync();
 
            await _context.Models.Include(m => m.Make).SingleOrDefaultAsync(m => m.Id == vehicle.ModelId);
 
             //Fetch vehicle with Features with the id
-             vehicle = await _context.Vehicles
-                .Include(v => v.Features)
-                //EagerLoad Vehicle Features
-                .ThenInclude(vf => vf.Feature)
-                .Include(v => v.Model)
-                .ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(v => v.Id == vehicle.Id);
+            vehicle = await _repository.GetVehicle(vehicle.Id);
 
             var result = _mapper.Map<Vehicle, VehicleResource>(vehicle);
             //This will get serialized as JSON object and return HTTP status code 200
@@ -62,13 +58,7 @@ namespace ShoppingCart.Controllers
                 return BadRequest(ModelState);
 
             //Mapping API Resource to domain object
-           var vehicle = await _context.Vehicles
-                .Include(v => v.Features)
-                //EagerLoad Vehicle Features
-                .ThenInclude(vf => vf.Feature)
-                .Include(v => v.Model)
-                .ThenInclude(m => m.Make)
-                .SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await _repository.GetVehicle(id);
 
             if (vehicle == null)
                 return NotFound();
@@ -84,24 +74,22 @@ namespace ShoppingCart.Controllers
         public async Task<IActionResult> DeleteVehicle(int id)
         {
             //Fetch vehicle with the id
-            var vehicle = await _context.Vehicles.FindAsync(id);
+            var vehicle = await _repository.GetVehicle(id, includeRelated:false);
             if (vehicle == null)
                 return NotFound();
-            _context.Remove(vehicle);
+
+            _repository.Remove(vehicle);
+
             await _context.SaveChangesAsync();
             return Ok(id);
         }
+
+       
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
             //Fetch vehicle with Features with the id
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Features)
-                //EagerLoad Vehicle Features
-                .ThenInclude(vf=>vf.Feature)
-                .Include(v=>v.Model)
-                .ThenInclude(m=>m.Make)
-                .SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await _repository.GetVehicle(id);
             if (vehicle == null)
                 return NotFound();
             var vehicleResource = _mapper.Map<Vehicle, VehicleResource>(vehicle);

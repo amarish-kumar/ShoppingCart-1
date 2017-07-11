@@ -28,6 +28,7 @@ namespace WebApplicationBasic
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
             //Added DbContext
             //services.AddDbContext<ShoppingCartDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
             services.AddDbContext<ShoppingCartDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
