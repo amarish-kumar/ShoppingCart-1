@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ShoppingCart.Models
+namespace ShoppingCart.Core.Models
 {
     [Table("Vehicles")]
     public class Vehicle

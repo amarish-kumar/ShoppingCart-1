@@ -4,7 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Controllers.Resources;
-using ShoppingCart.Models;
+using ShoppingCart.Core.Models;
 using ShoppingCart.Persistence;
 
 namespace ShoppingCart.Controllers

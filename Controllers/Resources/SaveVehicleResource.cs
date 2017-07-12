@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using ShoppingCart.Models;
 
 namespace ShoppingCart.Controllers.Resources
 {

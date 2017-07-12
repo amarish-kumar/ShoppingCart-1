@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ShoppingCart.Models
+namespace ShoppingCart.Core.Models
 {
     public class Make
     {

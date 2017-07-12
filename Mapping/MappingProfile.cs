@@ -2,7 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using ShoppingCart.Controllers.Resources;
-using ShoppingCart.Models;
+using ShoppingCart.Core.Models;
 
 namespace ShoppingCart.Mapping
 {

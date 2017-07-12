@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ShoppingCart.Persistence;
 using AutoMapper;
+using ShoppingCart.Core;
 
 namespace WebApplicationBasic
 {
@@ -29,6 +30,7 @@ namespace WebApplicationBasic
         {
             services.AddAutoMapper();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             //Added DbContext
             //services.AddDbContext<ShoppingCartDbContext>(options => options.UseSqlServer(Configuration["ConnectionStrings:Default"]));
             services.AddDbContext<ShoppingCartDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));

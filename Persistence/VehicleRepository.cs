@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ShoppingCart.Models;
+using ShoppingCart.Core;
+using ShoppingCart.Core.Models;
 
 namespace ShoppingCart.Persistence
 {
@@ -29,7 +30,7 @@ namespace ShoppingCart.Persistence
 
         public async Task<Vehicle> GetVehicle(int id, bool includeRelated =true)
         {
-            if (includeRelated != false)
+            if (!includeRelated)
                 return await _context.Vehicles.FindAsync(id);
             return await _context.Vehicles
                 .Include(v => v.Features)

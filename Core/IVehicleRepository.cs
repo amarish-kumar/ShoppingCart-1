@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using ShoppingCart.Models;
+using ShoppingCart.Core.Models;
 
-namespace ShoppingCart.Persistence
+namespace ShoppingCart.Core
 {
     public interface IVehicleRepository
     {

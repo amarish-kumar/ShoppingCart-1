@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ShoppingCart.Core;
 
 namespace ShoppingCart.Persistence
 {
@@ -11,7 +12,7 @@ namespace ShoppingCart.Persistence
             _context = context;
         }
 
-        public async Task Complete()
+        public async Task CompleteAsync()
         {
             await _context.SaveChangesAsync();
         }

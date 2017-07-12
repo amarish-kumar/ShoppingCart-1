@@ -1,5 +1,4 @@
-﻿using ShoppingCart.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;

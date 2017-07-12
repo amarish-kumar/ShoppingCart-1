@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace ShoppingCart.Persistence
+namespace ShoppingCart.Core
 {
     public interface IUnitOfWork
    {
-       Task Complete();
+       Task CompleteAsync();
    }
 }

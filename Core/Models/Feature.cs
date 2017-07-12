@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ShoppingCart.Models
+namespace ShoppingCart.Core.Models
 {
     public class Feature
     {

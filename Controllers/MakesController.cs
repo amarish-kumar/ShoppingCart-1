@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Controllers.Resources;
-using ShoppingCart.Models;
 using ShoppingCart.Persistence;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ShoppingCart.Core.Models;
 
 namespace ShoppingCart.Controllers
 {
