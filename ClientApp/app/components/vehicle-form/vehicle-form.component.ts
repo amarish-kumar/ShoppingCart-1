@@ -1,3 +1,4 @@
+import * as Raven from 'raven-js';
 import { Component, OnInit } from '@angular/core';
 import { VehicleService } from "../../services/vehicle.service";
 import { ToastyService } from "ng2-toasty";
@@ -60,7 +61,8 @@ export class VehicleFormComponent implements OnInit {
                 });
                 },
             //Error
-                err => {
+            err => {
+                Raven.captureException(err.originalError || err);
                     this.toastyService.error({
                         title: 'Error',
                         msg: 'An unexpected error happend!',
