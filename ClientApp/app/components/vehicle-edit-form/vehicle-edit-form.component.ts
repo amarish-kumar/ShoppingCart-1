@@ -7,14 +7,15 @@ import { ToastyService } from "ng2-toasty";
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/Observable/forkJoin';
 import { SaveVehicle, Vehicle } from './../../models/vehicle';
+import { isDevMode } from '@angular/core';
 
 @Component({
-    selector: 'app-vehicle-form',
-    templateUrl: './vehicle-form.component.html',
-    styleUrls: ['./vehicle-form.component.css'],
+    selector: 'app-vehicle-edit-form',
+    templateUrl: './vehicle-edit-form.component.html',
+    styleUrls: ['./vehicle-edit-form.component.css'],
     providers: [VehicleService]
 })
-export class VehicleFormComponent implements OnInit {
+export class VehicleEditFormComponent implements OnInit {
 
     makes: any[];
     models: any[];
@@ -168,14 +169,6 @@ export class VehicleFormComponent implements OnInit {
                     });
         }
 
-    }
-    delete() {
-        if (confirm("Are you sure?")) {
-            this.vehicleService.delete(this.vehicle.id)
-                .subscribe(x => {
-                    this.router.navigate(['/home']);
-                });
-        }
     }
 
 }
